@@ -4,6 +4,16 @@
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
+  <servlet>
+    <servlet-name>remoteLoggingServlet</servlet-name>
+    <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>remoteLoggingServlet</servlet-name>
+    <url-pattern>draganddrop/remote_logging</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>DragAndDrop.html</welcome-file>

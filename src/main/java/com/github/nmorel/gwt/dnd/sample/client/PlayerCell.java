@@ -1,5 +1,7 @@
 package com.github.nmorel.gwt.dnd.sample.client;
 
+import java.util.logging.Logger;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -25,6 +27,8 @@ public class PlayerCell
     }
 
     private static Template template;
+
+    private static Logger logger = Logger.getLogger( "PlayerCell" );
 
     public PlayerCell()
     {
@@ -56,20 +60,20 @@ public class PlayerCell
         String eventType = event.getType();
         if ( BrowserEvents.DRAGENTER.equals( eventType ) )
         {
-            System.out.println( "drag enter cell : " + event.getDataTransfer().getData( "player" ) );
+            logger.info( "drag enter cell : " + event.getDataTransfer().getData( "player" ) );
         }
         else if ( BrowserEvents.DRAGLEAVE.equals( eventType ) )
         {
-            System.out.println( "drag leave cell : " + event.getDataTransfer().getData( "player" ) );
+            logger.info( "drag leave cell : " + event.getDataTransfer().getData( "player" ) );
         }
         else if ( BrowserEvents.DRAGOVER.equals( eventType ) )
         {
-            System.out.println( "drag over cell : " + event.getDataTransfer().getData( "player" ) );
+            logger.info( "drag over cell : " + event.getDataTransfer().getData( "player" ) );
         }
         else if ( BrowserEvents.DROP.equals( eventType ) )
         {
             String player = event.getDataTransfer().getData( "player" );
-            System.out.println( "drop on cell : " + player );
+            logger.info( "drop on cell : " + player );
             setValue( context, parent, player );
             if ( null != valueUpdater )
             {
@@ -78,14 +82,14 @@ public class PlayerCell
         }
         else if ( BrowserEvents.DRAGSTART.equals( eventType ) )
         {
-            System.out.println( "drag start cell : " + value );
+            logger.info( "drag start cell : " + value );
             event.getDataTransfer().setData( "player", value );
             event.getDataTransfer().setData( "column", Integer.toString( context.getColumn() ) );
             event.getDataTransfer().setData( "row", Integer.toString( context.getIndex() ) );
         }
         else if ( BrowserEvents.DRAGEND.equals( eventType ) )
         {
-            System.out.println( "drag end cell : " + event.getDataTransfer().getData( "player" ) );
+            logger.info( "drag end cell : " + event.getDataTransfer().getData( "player" ) );
         }
     }
 

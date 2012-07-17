@@ -3,6 +3,8 @@ package com.github.nmorel.gwt.dnd.sample.client;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -25,6 +27,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,6 +37,17 @@ import com.google.gwt.user.client.ui.Widget;
 public class DragAndDrop
     implements EntryPoint
 {
+    private static Logger logger = Logger.getLogger( "DragAndDrop" );
+
+    // initialize logger with custom formatter
+    static
+    {
+        Handler handlers[] = Logger.getLogger( "" ).getHandlers();
+        for ( Handler handler : handlers )
+        {
+            handler.setFormatter( new CustomLogFormatter( true ) );
+        }
+    }
 
     private static String[] names = new String[] { "Gabriel", "Arthur", "Louise", "Rapha\u00ebl", "Adam", "Chlo\u00e9",
         "Paul", "Alexandre", "Louis", "Emma", "Antoine", "Maxime", "Alice", "In\u00e8s", "Sarah", "Jeanne", "Lucas" };
@@ -47,7 +61,6 @@ public class DragAndDrop
      */
     public void onModuleLoad()
     {
-
         RootPanel
             .get()
             .add(
@@ -88,7 +101,7 @@ public class DragAndDrop
             @Override
             public void onDragOver( DragOverEvent event )
             {
-                System.out.println( "drag over player panel : " + event.getDataTransfer().getData( "player" ) );
+                logger.info( "drag over player panel : " + event.getDataTransfer().getData( "player" ) );
             }
         }, DragOverEvent.getType() );
         playerPanel.addBitlessDomHandler( new DropHandler() {
@@ -96,7 +109,7 @@ public class DragAndDrop
             public void onDrop( DropEvent event )
             {
                 String player = event.getDataTransfer().getData( "player" );
-                System.out.println( "drop on player panel : " + player );
+                logger.info( "drop on player panel : " + player );
                 String column = event.getDataTransfer().getData( "column" );
                 String row = event.getDataTransfer().getData( "row" );
                 if ( null != column && null != row )
@@ -108,6 +121,9 @@ public class DragAndDrop
                 }
             }
         }, DropEvent.getType() );
+
+        PopupPanel logPopupPanel = ( (PopupPanel) RootPanel.get().getWidget( 0 ) );
+        logPopupPanel.setPopupPosition( 10, 130 );
     }
 
     private Widget createPlayer( final String name )
@@ -129,7 +145,7 @@ public class DragAndDrop
             @Override
             public void onDragStart( DragStartEvent event )
             {
-                System.out.println( "drag start player : " + name );
+                logger.info( "drag start player : " + name );
                 event.getDataTransfer().setData( "player", name );
                 event.getDataTransfer().setDragImage( player.getElement(), 10, 10 );
             }
@@ -138,7 +154,7 @@ public class DragAndDrop
             @Override
             public void onDragEnd( DragEndEvent event )
             {
-                System.out.println( "drag end player : " + name );
+                logger.info( "drag end player : " + name );
             }
         } );
 
