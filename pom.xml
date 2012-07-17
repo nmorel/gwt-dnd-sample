@@ -11,20 +11,46 @@
   <name>GWT Drag And Drop Sample</name>
 
   <properties>
-    <!-- Convenience property to set the GWT version -->
-    <gwtVersion>2.5.0-rc1</gwtVersion>
-    <!-- GWT needs at least java 1.5 -->
-    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+
+    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    <gae.home>${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home>
+
+    <!-- Plugins version -->
+    <maven-compiler.version>2.3.2</maven-compiler.version>
+    <maven-resources.version>2.4.2</maven-resources.version>
+    <gwt-maven.version>2.4.0</gwt-maven.version>
+    <maven-gae.version>0.9.4</maven-gae.version>
+
+    <!-- Dependencies version -->
+    <gwt.version>2.5.0-rc1</gwt.version>
+    <gae.version>1.7.0</gae.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
-      <version>${gwtVersion}</version>
+      <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <!-- AppEngine -->
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-1.0-sdk</artifactId>
+      <version>${gae.version}</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-labs</artifactId>
+      <version>${gae.version}</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -37,7 +63,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.4.0</version>
+        <version>${gwt-maven.version}</version>
         <executions>
           <execution>
             <goals>
@@ -51,17 +77,20 @@
           <runTarget>DragAndDrop.html</runTarget>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
           <module>com.github.nmorel.gwt.dnd.sample.DragAndDrop</module>
+          <appEngineVersion>${gae.version}</appEngineVersion>
+          <appEngineHome>${gae.home}</appEngineHome>
+          <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
         </configuration>
         <dependencies>
           <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
+            <version>${gwt.version}</version>
           </dependency>
           <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
-            <version>${gwtVersion}</version>
+            <version>${gwt.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -69,13 +98,85 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>${maven-compiler.version}</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
+
+      <!-- Copy static web files before executing gwt:run -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources.version}</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${webappDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/webapp</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>net.kindleit</groupId>
+        <artifactId>maven-gae-plugin</artifactId>
+        <version>${maven-gae.version}</version>
+        <executions>
+          <execution>
+            <id />
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <serverId>appengine.google.com</serverId>
+        </configuration>
+      </plugin>
+
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>net.kindleit</groupId>
+                    <artifactId>maven-gae-plugin</artifactId>
+                    <versionRange>[${maven-gae.version},)</versionRange>
+                    <goals>
+                      <goal>unpack</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
   </build>
 
 </project>
