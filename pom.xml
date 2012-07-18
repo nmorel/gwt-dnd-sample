@@ -21,7 +21,7 @@
     <!-- Plugins version -->
     <maven-compiler.version>2.3.2</maven-compiler.version>
     <maven-resources.version>2.4.2</maven-resources.version>
-    <gwt-maven.version>2.4.0</gwt-maven.version>
+    <gwt-maven.version>2.5.0-rc1</gwt-maven.version>
     <maven-gae.version>0.9.4</maven-gae.version>
 
     <!-- Dependencies version -->

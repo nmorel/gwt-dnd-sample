@@ -7,7 +7,12 @@
 
   <inherits name="com.google.gwt.logging.Logging" />
   <set-property name="gwt.logging.logLevel" value="INFO" />
-<!--   <set-property name="gwt.logging.popupHandler" value="DISABLED" /> -->
+  <!-- <set-property name="gwt.logging.enabled" value="FALSE" /> -->
+  <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+  <set-property name="gwt.logging.developmentModeHandler" value="ENABLED" />
+  <set-property name="gwt.logging.popupHandler" value="ENABLED" />
+  <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+  <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
   <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
 
   <entry-point class='com.github.nmorel.gwt.dnd.sample.client.DragAndDrop' />

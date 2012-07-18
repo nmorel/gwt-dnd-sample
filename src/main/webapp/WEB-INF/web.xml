@@ -11,7 +11,7 @@
 
   <servlet-mapping>
     <servlet-name>remoteLoggingServlet</servlet-name>
-    <url-pattern>draganddrop/remote_logging</url-pattern>
+    <url-pattern>/draganddrop/remote_logging</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->
